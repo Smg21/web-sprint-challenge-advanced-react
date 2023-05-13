@@ -15,10 +15,12 @@ export default function AppFunctional(props) {
 
   // You can delete them and build your own logic from scratch.
 
-  const [initialMessage, setInitialMessage] = useState('')
+const [initialMessage, setInitialMessage] = useState('')
 const [initialEmail, setInitialEmail] = useState('')
 const [initialSteps, setInitialSteps] = useState(0)
 const [initialIndex, setInitialIndex] = useState(4)
+const [currentIndex, setCurrentIndex] = useState(0)
+
 
   const grid = [
     [1,1],[1,2],[1,3],
@@ -26,8 +28,8 @@ const [initialIndex, setInitialIndex] = useState(4)
     [3,1],[3,2],[3,3]
   ]
  
-
-  const direction = {
+//1,1 == 0 
+  const buttonDirection = {
     left: (index) => index - 1,
     right: (index) => index + 1,
     up: (index) => index - 3,
@@ -50,10 +52,10 @@ return coordinatess;
     //Needs to know what coordinate we at based on index
 
   }
-  console.log(getXY(grid, 3));
+  
   //getXY(grid, 2);
   const coordinate = getXY(grid, 3);
-  console.log('line 56', coordinate)
+ 
   function getXYMessage(grid) {
     // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
     // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
@@ -64,7 +66,7 @@ return coordinatess;
 
 
   }
- console.log(getXYMessage(grid));
+
 
   function reset() {
     setInitialEmail('');
@@ -74,33 +76,42 @@ return coordinatess;
     // Use this helper to reset all states to their initial values.
   }
 
-  function getNextIndex(direction, grid) {
+  function getNextIndex(direction, grid, e) {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
-    const coordinate = getXY(grid, 4)
-    let currentIndexLocation = grid.find((block,index) =>{ 
-console.log(`line 83`, coordinate);
-console.log(`line 84`, block);
+    let userDirection = e.target.id 
+    
+    const coordinate = getXY(grid, currentIndex)
+    let currentIndexLocation = grid.reduce((acc, block,index)  =>{ 
       if (coordinate === block){
-      return indexOf(index);
+        let data = {index:index, block:block}
+      return data;
+      
       }
-  });
-  console.log(`line 89`, currentIndexLocation);
-  console.log(`line 90`, coordinate)
-
-  const nextIndex= direction.left(currentIndexLocation)
-  console.log(`line 93`, nextIndex);
+     return acc; 
+  },{});
+  const nextIndex= direction[userDirection](currentIndexLocation.index)
   return nextIndex;
   }
 
-getNextIndex(direction, grid);
 
-  function move(evt) {
+
+  function move(buttonDirection, grid, e) {
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
+   
+if (e.target.id === 'up'){
+    setCurrentIndex(getNextIndex(buttonDirection, grid, e));
+} else if (e.target.id === 'down'){
+   setCurrentIndex(getNextIndex(buttonDirection, grid, e));
+} else if (e.target.id === 'left'){
+   setCurrentIndex(getNextIndex(buttonDirection, grid, e));
+} else if (e.target.id === 'right'){
+  setCurrentIndex(getNextIndex(buttonDirection, grid, e));
+}
   }
-
+console.log(`currentIndex`, currentIndex);
   function onChange(evt) {
     // You will need this to update the value of the input.
   }
@@ -109,8 +120,28 @@ getNextIndex(direction, grid);
     // Use a POST request to send a payload to the server.
   }
 
+  function initial(idx) {
+    return idx === 4 ? 'A' : '' 
+  }
+
+  function current (idx) {
+      return idx === currentIndex ? 'C' : ''
+
+  }
+
+  // function activeI (idx){
+  //   return idx === 4 ? 'active' : ''
+  // }
+
+  // function activeC(idx){
+  //   return idx === currentIndex ? 'active' : ''
+  // }
+
+
+ let initialPosition; 
+ let dynamicPosition;
   return (
-    <div id="wrapper" className={props.className}>
+    <div  id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates (2, 2)</h3>
         <h3 id="steps">You moved 0 times</h3>
@@ -118,8 +149,8 @@ getNextIndex(direction, grid);
       <div id="grid">
         {
           [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-              {idx === 4 ? 'B' : null}
+            <div key={idx} className={`square${idx === initialIndex || currentIndex ? ' active' : ''}`}>
+              {idx === initialIndex ? 'B' : null}
             </div>
           ))
         }
@@ -128,10 +159,10 @@ getNextIndex(direction, grid);
         <h3 id="message"></h3>
       </div>
       <div id="keypad">
-        <button id="left">LEFT</button>
-        <button id="up">UP</button>
-        <button id="right">RIGHT</button>
-        <button id="down">DOWN</button>
+        <button onClick={(e) => move(buttonDirection, grid, e)} id="left">LEFT</button>
+        <button onClick={(e) => move(buttonDirection, grid, e)} id="up">UP</button>
+        <button onClick={(e) => move(buttonDirection, grid, e)} id="right">RIGHT</button>
+        <button onClick={(e) => move(buttonDirection, grid, e)} id="down">DOWN</button>
         <button id="reset">reset</button>
       </div>
       <form>
