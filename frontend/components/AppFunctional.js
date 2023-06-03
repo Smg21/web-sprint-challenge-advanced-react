@@ -38,17 +38,13 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
     setCurrentCoordinate(getXY(grid, currentIndex))
   }, [currentIndex])
   
- 
-  // function getXYMessage(grid, currentIndex) {  
-  //   const coordinate = getXY(grid, currentIndex);
-  //   return  `Cordinates (${coordinate})`;
-  // }
 
   function reset() {
     setInitialEmail('');
     setInitialSteps(0);
     setInitialMessage('');
-    setInitialIndex(4);
+    setCurrentIndex(4);
+  
   }
 
   function getNextIndex(direction, grid, e, currentIndex) {
@@ -118,7 +114,7 @@ if (e.target.id === 'up'){
         <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="up">UP</button>
         <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="right">RIGHT</button>
         <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="down">DOWN</button>
-        <button id="reset">reset</button>
+        <button id="reset" onClick={(e)=> reset()}>reset</button>
       </div>
       <form>
         <input id="email" type="email" placeholder="type email"></input>
