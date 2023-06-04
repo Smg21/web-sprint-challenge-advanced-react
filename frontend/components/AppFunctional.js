@@ -16,10 +16,10 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
   ]
  
   const buttonDirection = {
-    left: (index) => index - 1,
-    right: (index) => index + 1,
-    up: (index) => index - 3,
-    down: (index) => index + 3
+    left: (index, block) => block.toString() !== "2,1" && block.toString() !== "1,1" && block.toString() !== "3,1"? index - 1 : index, 
+    right: (index, block) => block.toString() !== "1,3" && block.toString() !== "2,3" && block.toString() !== "3,3"? index + 1 : index,
+    up: (index, block) => block.toString() !== "1,1" && block.toString() !== "1,2" && block.toString() !== "1,3"? index - 3 : index,
+    down: (index, block) => block.toString() !== "3,1" && block.toString() !== "3,2" && block.toString() !== "3,3"? index + 3: index
   }
 
 
@@ -44,7 +44,6 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
     setInitialSteps(0);
     setInitialMessage('');
     setCurrentIndex(4);
-  
   }
 
   function getNextIndex(direction, grid, e, currentIndex) {
@@ -57,7 +56,7 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
       }
      return acc; 
   },{});
-      const nextIndex= direction[userDirection](currentIndexLocation.index)
+      const nextIndex= direction[userDirection](currentIndexLocation.index, currentIndexLocation.block)
       setCurrentCoordinate(currentIndexLocation.block)
       return nextIndex;
     
@@ -82,9 +81,7 @@ if (e.target.id === 'up'){
     if (evt) {
       setInitialSteps((prev) => prev+ 1)
       setCurrentCoordinate(getXY(grid, currentIndex))
-      console.log(`line 82`, currentCoordinate)
     }
-   
   }
 
   function onSubmit(evt) {
@@ -94,7 +91,7 @@ if (e.target.id === 'up'){
   return (
     <div  id="wrapper" className={props.className}>
       <div className="info">
-        <h3 id="coordinates">{currentIndex === 4 ?  `Coordinates ${currentCoordinate}`: `Coordinates ${currentCoordinate}`}</h3>
+        <h3 id="coordinates">{`Coordinates ${currentCoordinate}`}</h3>
         <h3 id="steps">You moved {initialSteps} times</h3>
       </div>
       <div id="grid">
