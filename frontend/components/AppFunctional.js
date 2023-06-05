@@ -6,8 +6,10 @@ export default function AppFunctional(props) {
 const [initialMessage, setInitialMessage] = useState('')
 const [initialEmail, setInitialEmail] = useState('')
 const [initialSteps, setInitialSteps] = useState(0)
-const [currentIndex, setCurrentIndex] = useState(4)
+const [currentUserIndex, setcurrentUserIndex] = useState(0)
 const [currentCoordinate, setCurrentCoordinate] = useState()
+const [error, setError] = useState()
+const[initialIndex, setInitialIndex] = useState(4)
 
   const grid = [
     [1,1],[1,2],[1,3],
@@ -22,7 +24,10 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
     down: (index, block) => block.toString() !== "3,1" && block.toString() !== "3,2" && block.toString() !== "3,3"? index + 3: index
   }
 
-
+function errorHandling (coordinates) {
+  console.log(`line 27`, coordinates)
+ coordinates.toString() === "2,1" ? setError("You can't move left") : null;
+}
 
   function getXY(grid,idx) {
     const coordinatess = grid.find((block,index) => {
@@ -35,52 +40,72 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
   }
 
   useEffect(()=> {
-    setCurrentCoordinate(getXY(grid, currentIndex))
-  }, [currentIndex])
-  
+ if (initialSteps < 2){
+      setcurrentUserIndex(4)
+ } 
+}, [initialSteps])
 
+  useEffect(()=> {
+    
+    setCurrentCoordinate(getXY(grid, currentUserIndex))
+   
+  }, [currentUserIndex])
+  
   function reset() {
     setInitialEmail('');
     setInitialSteps(0);
     setInitialMessage('');
-    setCurrentIndex(4);
+    setcurrentUserIndex(4);
   }
 
-  function getNextIndex(direction, grid, e, currentIndex) {
-    let coordinate = getXY(grid, currentIndex);
+  function getNextIndex(direction, grid, e, currentUserIndex) {
+    let coordinate = getXY(grid, currentUserIndex);
+
     let userDirection = e.target.id 
-    let currentIndexLocation = grid.reduce((acc, block,index)  =>{ 
+    console.log(`line 56`, userDirection)
+    let currentUserIndexLocation = grid.reduce((acc, block,index)  =>{ 
       if (coordinate === block){
         let data = {index:index, block:block}
       return data;
       }
      return acc; 
   },{});
-      const nextIndex= direction[userDirection](currentIndexLocation.index, currentIndexLocation.block)
-      setCurrentCoordinate(currentIndexLocation.block)
+      const nextIndex= direction[userDirection](currentUserIndex.index, currentUserIndexLocation.block)
+      console.log(`line 64 userIndex`, currentUserIndex)
+      console.log(`line 67 nextIndex`, nextIndex)
       return nextIndex;
+      
     
   }
 
-  function move(buttonDirection, grid, e, currentIndex) {
+  function move(buttonDirection, grid, e, currentUserIndex) {
+    if(e.target)
 if (e.target.id === 'up'){
-    setCurrentIndex(getNextIndex(buttonDirection, grid, e, currentIndex));
-    onChange(e);
-} else if (e.target.id === 'down'){
-   setCurrentIndex(getNextIndex(buttonDirection, grid, e, currentIndex));
-   onChange(e);
-} else if (e.target.id === 'left'){
-   setCurrentIndex(getNextIndex(buttonDirection, grid, e, currentIndex));
-   onChange(e);
-} else if (e.target.id === 'right'){
-  setCurrentIndex(getNextIndex(buttonDirection, grid, e, currentIndex));
   onChange(e);
+    setcurrentUserIndex(getNextIndex(buttonDirection, grid, e, currentUserIndex));
+    errorHandling(getXY(grid, currentUserIndex));
+console.log(`line 77`, getXY(grid, currentUserIndex))
+  } else if (e.target.id === 'down'){
+  onChange(e);
+   setcurrentUserIndex(getNextIndex(buttonDirection, grid, e, currentUserIndex));
+   errorHandling(getXY(grid, currentUserIndex))
+} else if (e.target.id === 'left'){
+  onChange(e);
+   setcurrentUserIndex(getNextIndex(buttonDirection, grid, e, currentUserIndex));
+   errorHandling(getXY(grid, currentUserIndex))
+} else if (e.target.id === 'right'){ 
+  onChange(e);
+  setcurrentUserIndex(getNextIndex(buttonDirection, grid, e, currentUserIndex));
+  errorHandling(getXY(grid, currentUserIndex))
 }
   }
   function onChange(evt) {
-    if (evt) {
+    if (initialSteps < 2){
+      setcurrentUserIndex(4)
+    }
+if (evt) {
       setInitialSteps((prev) => prev+ 1)
-      setCurrentCoordinate(getXY(grid, currentIndex))
+      setCurrentCoordinate(getXY(grid, currentUserIndex))
     }
   }
 
@@ -97,20 +122,20 @@ if (e.target.id === 'up'){
       <div id="grid">
         {
           [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === currentIndex ? ' active' : ''}`}>
-              {idx === currentIndex ? 'B' : null}
+            <div key={idx} className={`square${idx === currentUserIndex ? ' active' : ''}`}>
+              {idx === currentUserIndex ? 'B' : null}
             </div>
           ))
         }
       </div>
       <div className="info">
-        <h3 id="message"></h3>
+        <h3 id="message">{error}</h3>
       </div>
       <div id="keypad">
-        <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="left">LEFT</button>
-        <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="up">UP</button>
-        <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="right">RIGHT</button>
-        <button onClick={(e) => move(buttonDirection, grid, e, currentIndex)} id="down">DOWN</button>
+        <button onClick={(e) => move(buttonDirection, grid, e, currentUserIndex)} id="left">LEFT</button>
+        <button onClick={(e) => move(buttonDirection, grid, e, currentUserIndex)} id="up">UP</button>
+        <button onClick={(e) => move(buttonDirection, grid, e, currentUserIndex)} id="right">RIGHT</button>
+        <button onClick={(e) => move(buttonDirection, grid, e, currentUserIndex)} id="down">DOWN</button>
         <button id="reset" onClick={(e)=> reset()}>reset</button>
       </div>
       <form>
