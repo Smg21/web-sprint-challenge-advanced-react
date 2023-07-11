@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
+  //PIZZA
+ 
 
 export default function AppFunctional(props) {
 
 
+
+// const [form, setForm] = useState( {email: ''});
+const [initialEmail, setInitialEmail] = useState('')
 const [initialMessage, setInitialMessage] = useState('')
 const [initialSteps, setInitialSteps] = useState(0)
 const [currentIndex, setCurrentIndex] = useState(4)
@@ -12,6 +17,14 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
 
 
 
+
+function handleChange (e){
+  setInitialEmail({
+    ...initialEmail,
+    [e.target.name]: e.target.value
+  });
+  
+}
 
 //coordinate array
 
@@ -32,7 +45,7 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
       return coordinatess;
   }
 
-  //FOR EMAIL
+
   
   
 
@@ -93,7 +106,7 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
 
   function onSubmit(evt) {
    
- const info = { "x": currentCoordinate, "y": currentIndex, "steps": initialSteps, "email": email }
+ const info = { "x": currentCoordinate, "y": currentIndex, "steps": initialSteps, "email": initialEmail }
 
  axios
    .post("http://localhost:9000/api/result", info )
@@ -134,7 +147,7 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
       </div>
 
       <form onSubmit={onSubmit}>
-        <input id="email" type="email" placeholder="type email"></input>
+        <input id="email" type="email" placeholder="type email" onChange={handleChange} value={initialEmail} ></input>
         <input id="submit" type="submit"></input>
       </form>
     </div>
