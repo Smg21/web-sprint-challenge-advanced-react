@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
-  //PIZZA
+
  
 
 export default function AppFunctional(props) {
@@ -19,11 +19,7 @@ const [currentCoordinate, setCurrentCoordinate] = useState()
 
 
 function handleChange (e){
-  setInitialEmail({
-    ...initialEmail,
-    [e.target.name]: e.target.value
-  });
-  
+  setInitialEmail(e.target.value);
 }
 
 //coordinate array
@@ -62,6 +58,7 @@ function handleChange (e){
     setInitialSteps(0);
     setInitialMessage('');
     setCurrentIndex(4);
+    setInitialEmail('');
   }
 
   //to let the computer know where the current location is 
@@ -105,15 +102,22 @@ function handleChange (e){
   
 
   function onSubmit(evt) {
-   
- const info = { "x": currentCoordinate, "y": currentIndex, "steps": initialSteps, "email": initialEmail }
-
+    evt.preventDefault()
+    let x = currentCoordinate[0] 
+    let y = currentCoordinate[1]
+    let email = initialEmail
+    let steps = initialSteps
  axios
-   .post("http://localhost:9000/api/result", info )
+   .post("http://localhost:9000/api/result", {email, steps, x, y} )
    .then(res => {
-     console.log(res.data); 
+     setInitialMessage(res.data.message); 
    })
    .catch(err => {
+    console.log(`currentcoordinate x`, x);
+    console.log(`currentcoordinate y`, y);
+    console.log(`initial Steps`, initialSteps);
+    console.log(`initial Email`, initialEmail)
+   
      console.log(err); 
    });
    
@@ -147,7 +151,7 @@ function handleChange (e){
       </div>
 
       <form onSubmit={onSubmit}>
-        <input id="email" type="email" placeholder="type email" onChange={handleChange} value={initialEmail} ></input>
+        <input value={initialEmail} id="email" type="email" placeholder="type email" onChange={handleChange}  ></input>
         <input id="submit" type="submit"></input>
       </form>
     </div>
