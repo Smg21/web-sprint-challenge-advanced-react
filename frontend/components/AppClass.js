@@ -160,7 +160,7 @@ class AppClass extends Component {
           <h3 id="message">{initialMessage}</h3>
           <h4>lady win #29</h4>
         <h5>lady win #31</h5>
-        <h6>lady win #43</h6>
+       
         <h6> lady win #45</h6>
         <h6> lady win #49</h6>
         <h6> lady win #78</h6>
