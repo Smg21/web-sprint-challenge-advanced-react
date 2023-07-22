@@ -11,21 +11,24 @@ class AppClass extends Component {
       initialSteps: 0,
       currentIndex: 4,
       initialMessage: '',
-      currentCoordinate: [2, 2], // Add currentCoordinate to state
+      currentCoordinate: [2, 2], 
     };
 
-    // Faster and simpler grid representation
+   
     this.gridSize = 3;
   }
 
   componentDidMount() {
-    // Fetch initial data from the server when the component mounts
+    
     this.fetchInitialData();
   }
-  
+ 
 
   fetchInitialData = () => {
-    // Fetch the initial data (coordinates) from the server
+
+
+
+  
     axios.get("http://localhost:9000/api/initial")
       .then(res => {
         const { x, y } = res.data;
@@ -53,7 +56,7 @@ class AppClass extends Component {
       initialMessage: '',
       currentIndex: 4,
       initialEmail: '',
-      currentCoordinate: [2, 2], // Reset to the default coordinate [2, 2]
+      currentCoordinate: [2, 2], 
     });
   }
 
@@ -81,8 +84,8 @@ class AppClass extends Component {
       this.setState((prevState) => ({
         initialSteps: prevState.initialSteps + 1,
         currentIndex: next,
-        currentCoordinate: this.getXY(this.gridSize, next), // Update the currentCoordinate state
-        initialMessage: '', // Clear the message when moving
+        currentCoordinate: this.getXY(this.gridSize, next), 
+        initialMessage: '', 
       }));
     } else {
       this.setState({ initialMessage: `You can't go ${direction}` });
@@ -96,13 +99,29 @@ class AppClass extends Component {
     const { currentIndex, initialEmail, initialSteps } = this.state;
     const [x, y] = this.getXY(this.gridSize, currentIndex);
   
+    // Check if the email is empty
+    if (!initialEmail) {
+      this.setState({ initialMessage: "Ouch: email is required" });
+      return;
+    }
+  
+    // Email validation using regular expression
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(initialEmail)) {
+      this.setState({ initialMessage: "Ouch: email must be a valid email" });
+      return;
+    } else   if (!initialEmail) {
+      this.setState({ initialMessage: "Ouch: email is required" });
+      return;
+    }
+  
     axios
       .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
       .then((res) => {
         this.setState({ initialEmail: "" });
         this.setState({ initialMessage: res.data.message });
         if (["Email is banned", "Email is invalid", "Email is required"].includes(res.data.message)) {
-          this.setState({ initialEmail: "" }); // Reset the email input value on banned, invalid, or empty email
+          this.setState({ initialEmail: "" });
         }
       })
       .catch((err) => {
@@ -113,6 +132,7 @@ class AppClass extends Component {
         console.log(err);
       });
   };
+
   //cop
  
   render() {
@@ -161,7 +181,7 @@ export default AppClass;
 
 
 
-// export default AppClass;
+// export default AppClass; code with this.grid was slower but saving just in case
 
 ///////////////////////////////////////////////////////////
 

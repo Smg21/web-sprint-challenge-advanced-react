@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const gridSize = 3; // Move gridSize outside the functional component
+const gridSize = 3; 
 
 const AppFunctional = (props) => {
   const [initialEmail, setInitialEmail] = useState('');
@@ -10,26 +10,26 @@ const AppFunctional = (props) => {
   const [initialMessage, setInitialMessage] = useState('');
   const [currentCoordinate, setCurrentCoordinate] = useState([2, 2]);
 
-  // Calculate currentCoordinate using useEffect
+ 
   useEffect(() => {
     const currentCoordinate = getXY(gridSize, currentIndex);
     setCurrentCoordinate(currentCoordinate);
   }, [currentIndex]);
 
 
-  // Get X and Y coordinates based on grid size and index
+ 
   const getXY = (gridSize, idx) => {
     const x = (idx % gridSize) + 1;
     const y = Math.floor(idx / gridSize) + 1;
     return [x, y];
   };
 
-  // Handle input change
+
   const handleChange = (e) => {
     setInitialEmail(e.target.value);
   };
 
-  // Reset form values
+  
   const reset = () => {
     setInitialSteps(0);
     setInitialMessage('');
@@ -37,7 +37,7 @@ const AppFunctional = (props) => {
     setInitialEmail('');
   };
 
-  // Get the next index based on direction
+  
   const getNextIndex = (direction) => {
     switch (direction) {
       case 'up':
@@ -53,7 +53,7 @@ const AppFunctional = (props) => {
     }
   };
 
-  // Handle move button click
+
   const move = (event) => {
     const direction = event.target.id;
     const next = getNextIndex(direction);
@@ -70,7 +70,19 @@ const AppFunctional = (props) => {
     evt.preventDefault();
   
     const [x, y] = getXY(gridSize, currentIndex);
-  
+     // Check if the email is empty
+     if (!initialEmail) {
+      setInitialMessage("Ouch: email is required");
+      return;
+    }
+
+    // Email validation using regular expression
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(initialEmail)) {
+      setInitialMessage("Ouch: email must be a valid email");
+      return;
+    }
+   
     axios
       .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
       .then((res) => {
