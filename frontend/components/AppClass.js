@@ -95,7 +95,7 @@ class AppClass extends Component {
   //cop
   onSubmit = (evt) => {
     evt.preventDefault();
-  
+    this.setState({ initialEmail: "" });
     const { currentIndex, initialEmail, initialSteps } = this.state;
     const [x, y] = this.getXY(this.gridSize, currentIndex);
      if(initialEmail === "foo@bar.baz"){
@@ -116,7 +116,7 @@ class AppClass extends Component {
       this.setState({ initialMessage: "Ouch: email is required" });
       return;
     }
-  
+   
     axios
       .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
       .then((res) => {

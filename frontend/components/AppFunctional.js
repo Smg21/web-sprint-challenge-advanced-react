@@ -68,6 +68,7 @@ const AppFunctional = (props) => {
 
   const onSubmit = (evt) => {
     evt.preventDefault();
+    setInitialEmail("");
   
     const [x, y] = getXY(gridSize, currentIndex);
      // Check if the email is empty
