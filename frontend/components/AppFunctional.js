@@ -42,7 +42,11 @@ function handleChange (e){
   }
 
 
-  
+   // getXYMessage = () => {
+  //   // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
+  //   // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
+  //   // returns the fully constructed string.
+  // }
   
 
   //To make it so it starts on loading with the B in the center, 
@@ -159,3 +163,18 @@ function handleChange (e){
 }
 
 //Trying To Figure Out How To Get Email To Work With Having The Value Of Whatever Is Typed In, 
+
+
+
+
+
+
+
+
+          {/* {
+            [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
+              <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
+                {idx === 4 ? 'B' : null}
+              </div>
+            ))
+          } */}
