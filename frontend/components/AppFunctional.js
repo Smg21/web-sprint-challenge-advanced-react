@@ -124,6 +124,7 @@ const AppFunctional = (props) => {
       </div>
       <div className="info">
         <h3 id="message">{initialMessage}</h3>
+        <h6> lady win #73</h6>
       </div>
       <div id="keypad">
         <button onClick={move} id="left">

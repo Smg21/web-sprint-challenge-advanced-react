@@ -145,6 +145,7 @@ class AppClass extends Component {
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${currentCoordinate[0]}, ${currentCoordinate[1]})`}</h3>
           <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
+          <h6> lady win #73</h6>
         </div>
         <div id="grid">
           {
