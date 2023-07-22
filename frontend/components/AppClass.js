@@ -101,7 +101,7 @@ class AppClass extends Component {
       .then((res) => {
         this.setState({ initialEmail: "" });
         this.setState({ initialMessage: res.data.message });
-        if (res.data.message === "Email is banned" || res.data.message === "Email is invalid" || res.data.message === "Email is required") {
+        if (["Email is banned", "Email is invalid", "Email is required"].includes(res.data.message)) {
           this.setState({ initialEmail: "" }); // Reset the email input value on banned, invalid, or empty email
         }
       })
@@ -113,7 +113,8 @@ class AppClass extends Component {
         console.log(err);
       });
   };
-  
+  //cop
+ 
   render() {
     const { initialEmail, currentIndex, initialSteps, initialMessage, currentCoordinate } = this.state;
 

@@ -87,27 +87,7 @@ const AppFunctional = (props) => {
         console.log(err);
       });
   };
-  // const onSubmit = (evt) => {
-  //   evt.preventDefault();
-  
-  //   const [x, y] = getXY(gridSize, currentIndex);
-  
-  //   axios
-  //     .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
-  //     .then((res) => {
-  //       setInitialMessage(res.data.message);
-  //       if (res.data.message === "Email is banned" || res.data.message === "Email is invalid" || res.data.message === "Email is required") {
-  //         setInitialEmail(""); // Reset the email input value on banned, invalid, or empty email
-  //       }
-  //       setInitialEmail("");
-  //     })
-  //     .catch((err) => {
-  //       console.log(`currentcoordinate x`, x);
-  //       console.log(`currentcoordinate y`, y);
-  //       console.log(`initial Email`, initialEmail);
-  //       console.log(err);
-  //     });
-  // };
+
   
 
   return (
