@@ -128,7 +128,6 @@ const AppFunctional = (props) => {
         <h6> lady win #73</h6>
         <h6> lady win #45</h6>
         <h6> lady win #49</h6>
-        <h6> lady win #43</h6>
         <h6> lady win #78</h6>
       </div>
       <div id="keypad">
