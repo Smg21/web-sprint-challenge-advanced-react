@@ -114,6 +114,7 @@ const AppFunctional = (props) => {
         <h4>lady win #29</h4>
         <h5>lady win #31</h5>
         <h6>lady win #43</h6>
+        <h7>{initialMessage}</h7>
       </div>
       <div id="grid">
         {Array.from({ length: gridSize * gridSize }, (_, idx) => (
@@ -125,6 +126,10 @@ const AppFunctional = (props) => {
       <div className="info">
         <h3 id="message">{initialMessage}</h3>
         <h6> lady win #73</h6>
+        <h6> lady win #45</h6>
+        <h6> lady win #49</h6>
+        <h6> lady win #43</h6>
+        <h6> lady win #78</h6>
       </div>
       <div id="keypad">
         <button onClick={move} id="left">
@@ -132,7 +137,7 @@ const AppFunctional = (props) => {
         </button>
         <button onClick={move} id="up">
           UP
-        </button>
+        </button>ddd
         <button onClick={move} id="right">
           RIGHT
         </button>

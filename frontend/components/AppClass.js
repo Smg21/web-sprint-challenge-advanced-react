@@ -161,6 +161,11 @@ class AppClass extends Component {
           <h4>lady win #29</h4>
         <h5>lady win #31</h5>
         <h6>lady win #43</h6>
+        <h6> lady win #45</h6>
+        <h6> lady win #49</h6>
+        <h6> lady win #78</h6>
+        <h6> lady win #70</h6>
+        <h7>{this.message}</h7>
         </div>
         <div id="keypad">
           <button onClick={this.move} id="left">LEFT</button>
