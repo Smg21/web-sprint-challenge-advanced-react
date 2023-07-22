@@ -1,4 +1,5 @@
 
+
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -10,16 +11,30 @@ class AppClass extends Component {
       initialSteps: 0,
       currentIndex: 4,
       initialMessage: '',
+      currentCoordinate: [2, 2], // Add currentCoordinate to state
     };
 
     // Faster and simpler grid representation
     this.gridSize = 3;
   }
 
-  setCurrentCoordinate() {
-    const { currentIndex } = this.state;
-    const currentCoordinate = this.getXY(this.gridSize, currentIndex);
-    this.setState({ currentCoordinate });
+  componentDidMount() {
+    // Fetch initial data from the server when the component mounts
+    this.fetchInitialData();
+  }
+  
+
+  fetchInitialData = () => {
+    // Fetch the initial data (coordinates) from the server
+    axios.get("http://localhost:9000/api/initial")
+      .then(res => {
+        const { x, y } = res.data;
+        const currentIndex = (y - 1) * this.gridSize + (x - 1);
+        this.setState({ currentIndex, currentCoordinate: [x, y] });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   getXY(gridSize, idx) {
@@ -37,7 +52,8 @@ class AppClass extends Component {
       initialSteps: 0,
       initialMessage: '',
       currentIndex: 4,
-      initialEmail: ''
+      initialEmail: '',
+      currentCoordinate: [2, 2], // Reset to the default coordinate [2, 2]
     });
   }
 
@@ -64,41 +80,48 @@ class AppClass extends Component {
     if (next !== this.state.currentIndex) {
       this.setState((prevState) => ({
         initialSteps: prevState.initialSteps + 1,
-        currentIndex: next
+        currentIndex: next,
+        currentCoordinate: this.getXY(this.gridSize, next), // Update the currentCoordinate state
+        initialMessage: '', // Clear the message when moving
       }));
     } else {
       this.setState({ initialMessage: `You can't go ${direction}` });
     }
   }
 
+  //cop
   onSubmit = (evt) => {
     evt.preventDefault();
-    
+  
     const { currentIndex, initialEmail, initialSteps } = this.state;
     const [x, y] = this.getXY(this.gridSize, currentIndex);
-
-    axios.post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
-      .then(res => {
+  
+    axios
+      .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
+      .then((res) => {
+        this.setState({ initialEmail: "" });
         this.setState({ initialMessage: res.data.message });
+        if (res.data.message === "Email is banned" || res.data.message === "Email is invalid" || res.data.message === "Email is required") {
+          this.setState({ initialEmail: "" }); // Reset the email input value on banned, invalid, or empty email
+        }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(`currentcoordinate x`, x);
         console.log(`currentcoordinate y`, y);
         console.log(`initial Steps`, initialSteps);
-        console.log(`initial Email`, initialEmail)
+        console.log(`initial Email`, initialEmail);
         console.log(err);
       });
-  }
-
+  };
+  
   render() {
-    const { initialEmail, currentIndex, initialSteps, initialMessage } = this.state;
-    const currentCoordinate = this.getXY(this.gridSize, currentIndex);
+    const { initialEmail, currentIndex, initialSteps, initialMessage, currentCoordinate } = this.state;
 
     return (
       <div id="wrapper" className={this.props.className}>
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${currentCoordinate[0]}, ${currentCoordinate[1]})`}</h3>
-          <h3 id="steps">You moved {initialSteps} times</h3>
+          <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
         </div>
         <div id="grid">
           {
@@ -110,7 +133,7 @@ class AppClass extends Component {
           }
         </div>
         <div className="info">
-          <h3 id="message" >{initialMessage}</h3>
+          <h3 id="message">{initialMessage}</h3>
         </div>
         <div id="keypad">
           <button onClick={this.move} id="left">LEFT</button>
@@ -132,6 +155,14 @@ class AppClass extends Component {
 export default AppClass;
 
 
+
+///////////////////////
+
+
+
+// export default AppClass;
+
+///////////////////////////////////////////////////////////
 
 // import React, { Component } from 'react';
 // import axios from 'axios';

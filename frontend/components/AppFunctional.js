@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const gridSize = 3; // Move gridSize outside the functional component
+
 const AppFunctional = (props) => {
-  const gridSize = 3;
   const [initialEmail, setInitialEmail] = useState('');
   const [initialSteps, setInitialSteps] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(4);
   const [initialMessage, setInitialMessage] = useState('');
-  const [currentCoordinate, setCurrentCoordinate] = useState([]);
+  const [currentCoordinate, setCurrentCoordinate] = useState([2, 2]);
 
   // Calculate currentCoordinate using useEffect
   useEffect(() => {
     const currentCoordinate = getXY(gridSize, currentIndex);
     setCurrentCoordinate(currentCoordinate);
   }, [currentIndex]);
+
 
   // Get X and Y coordinates based on grid size and index
   const getXY = (gridSize, idx) => {
@@ -39,13 +41,13 @@ const AppFunctional = (props) => {
   const getNextIndex = (direction) => {
     switch (direction) {
       case 'up':
-        return (currentIndex >= gridSize) ? currentIndex - gridSize : currentIndex;
+        return currentIndex >= gridSize ? currentIndex - gridSize : currentIndex;
       case 'down':
-        return (currentIndex + gridSize < gridSize * gridSize) ? currentIndex + gridSize : currentIndex;
+        return currentIndex + gridSize < gridSize * gridSize ? currentIndex + gridSize : currentIndex;
       case 'left':
-        return (currentIndex % gridSize !== 0) ? currentIndex - 1 : currentIndex;
+        return currentIndex % gridSize !== 0 ? currentIndex - 1 : currentIndex;
       case 'right':
-        return ((currentIndex + 1) % gridSize !== 0) ? currentIndex + 1 : currentIndex;
+        return (currentIndex + 1) % gridSize !== 0 ? currentIndex + 1 : currentIndex;
       default:
         return currentIndex;
     }
@@ -56,56 +58,70 @@ const AppFunctional = (props) => {
     const direction = event.target.id;
     const next = getNextIndex(direction);
     if (next !== currentIndex) {
-      setInitialSteps(prevSteps => prevSteps + 1);
+      setInitialSteps((prevSteps) => prevSteps + 1);
       setCurrentIndex(next);
     } else {
       setInitialMessage(`You can't go ${direction}`);
     }
   };
 
-  // Handle form submission
+
+ 
   const onSubmit = (evt) => {
     evt.preventDefault();
-    
+  
     const [x, y] = getXY(gridSize, currentIndex);
-
-    axios.post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
-      .then(res => {
+  
+    axios
+      .post("http://localhost:9000/api/result", { email: initialEmail, steps: initialSteps, x, y })
+      .then((res) => {
         setInitialMessage(res.data.message);
+        if (res.data.message === "Email is banned" || res.data.message === "Email is invalid" || res.data.message === "Email is required") {
+          setInitialEmail(""); // Reset the email input value on banned, invalid, or empty email
+        }
+        setInitialEmail("");
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(`currentcoordinate x`, x);
         console.log(`currentcoordinate y`, y);
-        console.log(`initial Steps`, initialSteps);
         console.log(`initial Email`, initialEmail);
         console.log(err);
       });
   };
+  
 
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{`Coordinates (${currentCoordinate[0]}, ${currentCoordinate[1]})`}</h3>
-        <h3 id="steps">You moved {initialSteps} times</h3>
+        <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
       </div>
       <div id="grid">
-        {
-          Array.from({ length: gridSize * gridSize }, (_, idx) => (
-            <div key={idx} className={`square${idx === currentIndex ? ' active' : ''}`}>
-              {idx === currentIndex ? 'B' : null}
-            </div>
-          ))
-        }
+        {Array.from({ length: gridSize * gridSize }, (_, idx) => (
+          <div key={idx} className={`square${idx === currentIndex ? ' active' : ''}`}>
+            {idx === currentIndex ? 'B' : null}
+          </div>
+        ))}
       </div>
       <div className="info">
-        <h3 id="message" >{initialMessage}</h3>
+        <h3 id="message">{initialMessage}</h3>
       </div>
       <div id="keypad">
-        <button onClick={move} id="left">LEFT</button>
-        <button onClick={move} id="up">UP</button>
-        <button onClick={move} id="right">RIGHT</button>
-        <button onClick={move} id="down">DOWN</button>
-        <button id="reset" onClick={reset}>reset</button>
+        <button onClick={move} id="left">
+          LEFT
+        </button>
+        <button onClick={move} id="up">
+          UP
+        </button>
+        <button onClick={move} id="right">
+          RIGHT
+        </button>
+        <button onClick={move} id="down">
+          DOWN
+        </button>
+        <button id="reset" onClick={reset}>
+          reset
+        </button>
       </div>
 
       <form onSubmit={onSubmit}>
@@ -119,6 +135,72 @@ const AppFunctional = (props) => {
 export default AppFunctional;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//WITH GRID AS ARRAY THING 
 // import React, { useState, useEffect } from 'react'
 // import axios from 'axios';
 
