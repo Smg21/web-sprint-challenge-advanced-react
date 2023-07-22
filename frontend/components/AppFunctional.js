@@ -110,6 +110,8 @@ const AppFunctional = (props) => {
       <div className="info">
         <h3 id="coordinates">{`Coordinates (${currentCoordinate[0]}, ${currentCoordinate[1]})`}</h3>
         <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
+        <h4>lady win #29</h4>
+        <h5>lady win #31</h5>
       </div>
       <div id="grid">
         {Array.from({ length: gridSize * gridSize }, (_, idx) => (

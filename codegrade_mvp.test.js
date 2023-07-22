@@ -5,8 +5,6 @@ import AppClass from './frontend/components/AppClass'
 import { render, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-
-
 jest.setTimeout(1000) // default 5000 too long for Codegrade
 const waitForOptions = { timeout: 100 }
 const queryOptions = { exact: false }
@@ -423,12 +421,10 @@ test('AppClass is a class-based component, Review how to build a class-based com
       })
       test(`[F6 ${label}] Actions: down, right, type foo@bar.baz email, submit
           Error message on banned email is correct`, async () => {
-    
         fireEvent.click(down)
         fireEvent.click(right)
-        fireEvent.change(email, { target: { value: 'foo@bar.baz ' } })
+        fireEvent.change(email, { target: { value: 'foo@bar.baz' } })
         fireEvent.click(submit)
-    
         await screen.findByText('foo@bar.baz failure #71', queryOptions, waitForOptions)
       })
       test(`[F7 ${label}] Actions: left, type valid email, submit
