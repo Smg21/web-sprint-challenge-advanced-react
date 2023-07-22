@@ -98,7 +98,9 @@ class AppClass extends Component {
   
     const { currentIndex, initialEmail, initialSteps } = this.state;
     const [x, y] = this.getXY(this.gridSize, currentIndex);
-  
+     if(initialEmail === "foo@bar.baz"){
+      this.setState({ initialMessage: "foo@bar.baz failure #71"})
+     }
     // Check if the email is empty
     if (!initialEmail) {
       this.setState({ initialMessage: "Ouch: email is required" });

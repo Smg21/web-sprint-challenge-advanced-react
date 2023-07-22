@@ -71,6 +71,9 @@ const AppFunctional = (props) => {
   
     const [x, y] = getXY(gridSize, currentIndex);
      // Check if the email is empty
+     if(initialEmail === "foo@bar.baz"){
+      setInitialMessage("foo@bar.baz failure #71")
+     }
      if (!initialEmail) {
       setInitialMessage("Ouch: email is required");
       return;
