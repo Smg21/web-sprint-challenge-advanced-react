@@ -113,6 +113,7 @@ const AppFunctional = (props) => {
         <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
         <h4>lady win #29</h4>
         <h5>lady win #31</h5>
+        <h6>lady win #43</h6>
       </div>
       <div id="grid">
         {Array.from({ length: gridSize * gridSize }, (_, idx) => (
