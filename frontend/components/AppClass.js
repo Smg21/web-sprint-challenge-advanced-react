@@ -146,6 +146,7 @@ class AppClass extends Component {
           <h3 id="coordinates">{`Coordinates (${currentCoordinate[0]}, ${currentCoordinate[1]})`}</h3>
           <h3 id="steps">You moved {initialSteps} time{initialSteps !== 1 ? 's' : ''}</h3>
           <h6> lady win #73</h6>
+          <h7>lady win #43</h7>
         </div>
         <div id="grid">
           {
